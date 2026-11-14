@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFind | Campus Lost & Found Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="container nav-inner">
+        <a href="index.html" class="logo"><span class="logo-mark">C</span>CampusFind</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+        <nav class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="items.html">Browse Items</a>
+            <a href="found.html">Report Found</a>
+            <a href="myreports.html">My Reports</a>
+            <a href="lost.html" class="cta">Report Lost</a>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container hero-grid">
+
+        <div>
+            <span class="eyebrow">✦ Your campus, connected</span>
+            <h1>Lost something on campus? <span>Let's find it.</span></h1>
+            <p class="lead">
+                A central place for students to report lost belongings,
+                post found items and reconnect with what matters.
+            </p>
+
+            <form class="hero-search" action="items.html" method="get">
+                <input type="text" name="q" placeholder="Search wallet, ID card, keys...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+
+            <div class="hero-links">
+                <a href="lost.html" class="btn btn-outline">I lost something</a>
+                <a href="found.html" class="btn btn-outline">I found something</a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="hero-photo">
+                <img src="images/campus-hero.jpg" alt="Our college campus"
+                     onerror="this.style.display='none'">
+                <div class="hero-photo-note">
+                    <span class="fc-icon">📍</span>
+                    <div>
+                        <strong>Across the whole campus</strong>
+                        <small>Report and find items in every block</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<div class="container stats-strip">
+    <div class="stats-grid">
+        <div class="stat"><h3 id="statTotal">0</h3><p>Items reported</p></div>
+        <div class="stat"><h3 id="statLost">0</h3><p>Reported lost</p></div>
+        <div class="stat"><h3 id="statFound">0</h3><p>Reported found</p></div>
+        <div class="stat"><h3 id="statReturned">0</h3><p>Returned to owners</p></div>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="section-row">
+            <div>
+                <span class="tag">Latest activity</span>
+                <h2>Recently reported items</h2>
+            </div>
+            <a href="items.html" class="link-arrow">View all items →</a>
+        </div>
+        <div class="item-grid" id="recentGrid"></div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <span class="tag">Around our campus</span>
+            <h2>Browse by location</h2>
+            <p>Pick a block to see everything reported there.</p>
+        </div>
+        <div class="location-grid" id="locationGrid"></div>
+    </div>
+</section>
+
+<section class="section white">
+    <div class="container">
+        <div class="section-head">
+            <span class="tag">Simple process</span>
+            <h2>How CampusFind works</h2>
+            <p>Three quick steps to get a belonging back to its owner.</p>
+        </div>
+        <div class="steps">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <h3>Report</h3>
+                <p>Submit the details of an item you lost or found, with location, date and an optional photo.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <h3>Search</h3>
+                <p>Browse and filter reports by category, location and type to find a match.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <h3>Reconnect</h3>
+                <p>Use the contact details on the listing to recover your item.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container cta-grid">
+        <div class="cta-card lost">
+            <h3>Lost something?</h3>
+            <p>Tell us what you lost and where. Someone may already have found it.</p>
+            <a href="lost.html" class="btn btn-light">Report a lost item</a>
+        </div>
+        <div class="cta-card found">
+            <h3>Found something?</h3>
+            <p>Help a fellow student by posting the item you found on campus.</p>
+            <a href="found.html" class="btn btn-light">Report a found item</a>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container footer-grid">
+        <div>
+            <a href="index.html" class="logo"><span class="logo-mark">C</span>CampusFind</a>
+            <p>Helping campus communities reconnect with their belongings, one item at a time.</p>
+        </div>
+        <div>
+            <h4>Explore</h4>
+            <a href="index.html">Home</a>
+            <a href="items.html">Browse Items</a>
+            <a href="myreports.html">My Reports</a>
+        </div>
+        <div>
+            <h4>Report</h4>
+            <a href="lost.html">Report Lost Item</a>
+            <a href="found.html">Report Found Item</a>
+        </div>
+    </div>
+    <div class="container footer-bottom">© 2026 CampusFind. All rights reserved.</div>
+</footer>
+
+<script src="js/common.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Items | CampusFind</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="container nav-inner">
+        <a href="index.html" class="logo"><span class="logo-mark">C</span>CampusFind</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="items.html" class="active">Browse Items</a>
+            <a href="found.html">Report Found</a>
+            <a href="myreports.html">My Reports</a>
+            <a href="lost.html" class="cta">Report Lost</a>
+        </nav>
+    </div>
+</header>
+
+<section class="page-header">
+    <div class="container">
+        <div class="crumbs"><a href="index.html">Home</a> / Browse Items</div>
+        <h1>Browse lost & found items</h1>
+        <p>Search every report on campus. Click any item to see the full details.</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="filter-bar">
+        <input type="text" id="searchInput" placeholder="Search by name, place or description...">
+
+        <select id="categoryFilter">
+            <option value="all">All categories</option>
+            <option>Electronics</option>
+            <option>Accessories</option>
+            <option>Documents</option>
+            <option>Books</option>
+            <option>Keys</option>
+            <option>Others</option>
+        </select>
+
+        <select id="typeFilter">
+            <option value="all">Lost & Found</option>
+            <option value="Lost">Lost</option>
+            <option value="Found">Found</option>
+        </select>
+
+        <select id="locationFilter">
+            <option value="all">All locations</option>
+        </select>
+    </div>
+
+    <div class="results-row">
+        <span id="resultCount"></span>
+        <button class="reset-btn" id="resetBtn">Reset filters</button>
+    </div>
+
+    <div class="item-grid" id="itemGrid"></div>
+
+    <div class="empty-box" id="emptyBox">
+        <h3>No matching items</h3>
+        <p>Try a different search or reset the filters.</p>
+    </div>
+</div>
+
+<div style="height: 70px"></div>
+
+<footer class="footer">
+    <div class="container footer-grid">
+        <div>
+            <a href="index.html" class="logo"><span class="logo-mark">C</span>CampusFind</a>
+            <p>Helping campus communities reconnect with their belongings, one item at a time.</p>
+        </div>
+        <div>
+            <h4>Explore</h4>
+            <a href="index.html">Home</a>
+            <a href="items.html">Browse Items</a>
+            <a href="myreports.html">My Reports</a>
+        </div>
+        <div>
+            <h4>Report</h4>
+            <a href="lost.html">Report Lost Item</a>
+            <a href="found.html">Report Found Item</a>
+        </div>
+    </div>
+    <div class="container footer-bottom">© 2026 CampusFind. All rights reserved.</div>
+</footer>
+
+<script src="js/common.js"></script>
+<script src="js/items.js"></script>
+</body>
+</html>

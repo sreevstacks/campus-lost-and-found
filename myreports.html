@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reports | CampusFind</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="container nav-inner">
+        <a href="index.html" class="logo"><span class="logo-mark">C</span>CampusFind</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="items.html">Browse Items</a>
+            <a href="found.html">Report Found</a>
+            <a href="myreports.html" class="active">My Reports</a>
+            <a href="lost.html" class="cta">Report Lost</a>
+        </nav>
+    </div>
+</header>
+
+<section class="page-header">
+    <div class="container">
+        <div class="crumbs"><a href="index.html">Home</a> / My Reports</div>
+        <h1>My reports</h1>
+        <p>Update the status of your listings or remove them once the item is sorted.</p>
+    </div>
+</section>
+
+<div class="container" style="max-width: 860px;">
+    <div class="report-list" id="reportList" style="margin-top: -40px; position: relative; z-index: 2;"></div>
+
+    <div class="empty-box" id="noReports" style="margin-top: -40px; position: relative; z-index: 2;">
+        <h3>No reports yet</h3>
+        <p style="margin: 8px 0 20px;">Reports you submit will appear here.</p>
+        <a href="lost.html" class="btn btn-primary">Report lost item</a>
+        <a href="found.html" class="btn btn-outline">Report found item</a>
+    </div>
+</div>
+
+<div style="height: 70px"></div>
+
+<footer class="footer">
+    <div class="container footer-grid">
+        <div>
+            <a href="index.html" class="logo"><span class="logo-mark">C</span>CampusFind</a>
+            <p>Helping campus communities reconnect with their belongings, one item at a time.</p>
+        </div>
+        <div>
+            <h4>Explore</h4>
+            <a href="index.html">Home</a>
+            <a href="items.html">Browse Items</a>
+            <a href="myreports.html">My Reports</a>
+        </div>
+        <div>
+            <h4>Report</h4>
+            <a href="lost.html">Report Lost Item</a>
+            <a href="found.html">Report Found Item</a>
+        </div>
+    </div>
+    <div class="container footer-bottom">© 2026 CampusFind. All rights reserved.</div>
+</footer>
+
+<script src="js/common.js"></script>
+<script src="js/myreports.js"></script>
+</body>
+</html>

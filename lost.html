@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Lost Item | CampusFind</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-type="Lost">
+
+<header class="navbar">
+    <div class="container nav-inner">
+        <a href="index.html" class="logo"><span class="logo-mark">C</span>CampusFind</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="items.html">Browse Items</a>
+            <a href="found.html">Report Found</a>
+            <a href="myreports.html">My Reports</a>
+            <a href="lost.html" class="cta">Report Lost</a>
+        </nav>
+    </div>
+</header>
+
+<section class="page-header">
+    <div class="container">
+        <div class="crumbs"><a href="index.html">Home</a> / Report Lost Item</div>
+        <h1>Report a lost item</h1>
+        <p>Give us as many details as you can. It helps others recognise your item quickly.</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="form-layout">
+
+        <div class="form-card">
+
+            <div id="formArea">
+                <h2>Item details</h2>
+                <p class="sub">Fields marked with * are required.</p>
+
+                <form id="reportForm">
+                    <div class="form-grid">
+
+                        <div class="field full">
+                            <label for="name">Item name *</label>
+                            <input type="text" id="name" required placeholder="e.g. Black leather wallet">
+                        </div>
+
+                        <div class="field">
+                            <label for="category">Category *</label>
+                            <select id="category" required>
+                                <option value="">Select category</option>
+                                <option>Electronics</option>
+                                <option>Accessories</option>
+                                <option>Documents</option>
+                                <option>Books</option>
+                                <option>Keys</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="date">Date lost *</label>
+                            <input type="date" id="date" required>
+                        </div>
+
+                        <div class="field">
+    <label for="place">Block / place *</label>
+    <select id="place" required>
+        <option value="">Select place</option>
+    </select>
+</div>
+
+<div class="field" id="floorField" style="display: none;">
+    <label for="floor">Floor *</label>
+    <select id="floor"></select>
+</div>
+
+<div class="field full">
+    <label for="spot">Exact spot <em>(optional)</em></label>
+    <input type="text" id="spot" placeholder="e.g. near the staircase, Room 302, third bench">
+</div>
+
+                        <div class="field full">
+                            <label for="description">Description *</label>
+                            <textarea id="description" rows="4" required
+                                placeholder="Colour, brand, size, marks or anything unique"></textarea>
+                        </div>
+
+                        <div class="field">
+                            <label for="contact">Contact (email or phone) *</label>
+                            <input type="text" id="contact" required placeholder="you@college.edu">
+                        </div>
+
+                        <div class="field">
+    <label for="photo">Photo of the item *</label>
+    <input type="file" id="photo" accept="image/*" required>
+    <img id="photoPreview" class="photo-preview" alt="Photo preview" style="display: none;">
+</div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Submit lost report</button>
+                        <a href="items.html" class="btn btn-outline">Cancel</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="success-box" id="success">
+                <div class="success-icon">✓</div>
+                <h2>Report submitted</h2>
+                <p>Your lost item has been added. Check the listings in case someone has already found it.</p>
+                <a href="items.html" class="btn btn-primary">Browse items</a>
+                <a href="myreports.html" class="btn btn-outline">View my reports</a>
+            </div>
+
+        </div>
+
+        <aside class="tips-card">
+            <h3>Tips for a faster match</h3>
+            <ul>
+                <li>Be specific about the place and time you last had it</li>
+                <li>Mention unique marks, stickers or scratches</li>
+                <li>Add a clear photo if you have one</li>
+                <li>Use a contact you check regularly</li>
+            </ul>
+        </aside>
+
+    </div>
+</div>
+
+<div style="height: 70px"></div>
+
+<footer class="footer">
+    <div class="container footer-grid">
+        <div>
+            <a href="index.html" class="logo"><span class="logo-mark">C</span>CampusFind</a>
+            <p>Helping campus communities reconnect with their belongings, one item at a time.</p>
+        </div>
+        <div>
+            <h4>Explore</h4>
+            <a href="index.html">Home</a>
+            <a href="items.html">Browse Items</a>
+            <a href="myreports.html">My Reports</a>
+        </div>
+        <div>
+            <h4>Report</h4>
+            <a href="lost.html">Report Lost Item</a>
+            <a href="found.html">Report Found Item</a>
+        </div>
+    </div>
+    <div class="container footer-bottom">© 2026 CampusFind. All rights reserved.</div>
+</footer>
+
+<script src="js/common.js"></script>
+<script src="js/report.js"></script>
+</body>
+</html>
