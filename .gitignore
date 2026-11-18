@@ -1,3 +1,14 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables
 .env
-.DS_Store
+
+# SQLite database files
+backend/database/*.db
+backend/database/*.db-shm
+backend/database/*.db-wal
+
+# Uploaded test images
+backend/uploads/*
+!backend/uploads/.gitkeep
