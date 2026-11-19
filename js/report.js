@@ -1,5 +1,8 @@
 const form = document.getElementById("reportForm");
-const type = document.body.dataset.type; // "Lost" or "Found"
+const type = document.body.dataset.type;
+
+// Backend API address
+const API_URL = "http://localhost:5000/api/reports";
 
 // Fill the place and floor dropdowns
 setupLocationPicker();
@@ -7,6 +10,7 @@ setupLocationPicker();
 // Date can't be in the future
 const dateInput = document.getElementById("date");
 const today = new Date().toISOString().split("T")[0];
+
 dateInput.max = today;
 dateInput.value = today;
 
@@ -16,6 +20,7 @@ const preview = document.getElementById("photoPreview");
 
 photoInput.addEventListener("change", () => {
     const file = photoInput.files[0];
+
     if (file) {
         preview.src = URL.createObjectURL(file);
         preview.style.display = "block";
@@ -24,71 +29,85 @@ photoInput.addEventListener("change", () => {
     }
 });
 
-// Shrink the photo so it fits in browser storage
-function resizeImage(file, maxSize = 800) {
-    return new Promise(resolve => {
-        if (!file) return resolve("");
-
-        const reader = new FileReader();
-        reader.onload = e => {
-            const img = new Image();
-            img.onload = () => {
-                const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
-                const canvas = document.createElement("canvas");
-                canvas.width = img.width * scale;
-                canvas.height = img.height * scale;
-                canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-                resolve(canvas.toDataURL("image/jpeg", 0.75));
-            };
-            img.onerror = () => resolve("");
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
+// Submit report to backend
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    const photo = await resizeImage(photoInput.files[0]);
-
-    if (!photo) {
-        alert("Please upload a valid photo of the item.");
-        return;
-    }
 
     const place = document.getElementById("place").value;
     const floor = document.getElementById("floor").value;
     const spot = document.getElementById("spot").value.trim();
 
-    // Example result: "Lab Block · Floor 3 · near the staircase"
-    const location = [place, floor, spot].filter(Boolean).join(" · ");
+    // Create multipart form data
+    const formData = new FormData();
 
-    const report = {
-        id: Date.now(),
-        status: type,
-        state: "Open",
-        name: document.getElementById("name").value.trim(),
-        category: document.getElementById("category").value,
-        place: place,
-        location: location,
-        date: document.getElementById("date").value,
-        description: document.getElementById("description").value.trim(),
-        contact: document.getElementById("contact").value.trim(),
-        image: photo
-    };
+    formData.append("type", type.toLowerCase());
+    formData.append("name", document.getElementById("name").value.trim());
+    formData.append("category", document.getElementById("category").value);
+    formData.append("date", dateInput.value);
+    formData.append("place", place);
+    formData.append("floor", floor);
+    formData.append("spot", spot);
+    formData.append("description", document.getElementById("description").value.trim());
+    formData.append("contact", document.getElementById("contact").value.trim());
 
-    const saved = getSavedReports();
-    saved.unshift(report);
+    // Attach image if the user selected one
+    const photo = photoInput.files[0];
 
-    try {
-        saveReports(saved);
-    } catch (err) {
-        alert("Storage is full. Delete some old reports and try again.");
-        return;
+    if (photo) {
+        if (!photo.type.startsWith("image/")) {
+            alert("Please select a valid image.");
+            return;
+        }
+
+        if (photo.size > 5 * 1024 * 1024) {
+            alert("Image size must be less than 5 MB.");
+            return;
+        }
+
+        formData.append("image", photo);
     }
 
-    document.getElementById("formArea").style.display = "none";
-    document.getElementById("success").style.display = "block";
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    try {
+        const submitButton = form.querySelector('[type="submit"]');
+
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = "Submitting...";
+        }
+
+        const response = await fetch(API_URL, {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+             throw new Error(result.message || "Failed to submit report.");
+        }
+
+        // Remember this report ID for the My Reports page
+        const myReportIds = JSON.parse(localStorage.getItem("myReportIds") || "[]");
+        myReportIds.push(result.reportId);
+        localStorage.setItem("myReportIds", JSON.stringify(myReportIds));
+
+        alert("Report submitted successfully!");
+
+        document.getElementById("formArea").style.display = "none";
+        document.getElementById("success").style.display = "block";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+    } catch (error) {
+        console.error("Report submission error:", error);
+        alert(error.message || "Unable to connect to the backend. Please try again.");
+
+    } finally {
+        const submitButton = form.querySelector('[type="submit"]');
+
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit Report";
+        }
+    }
 });
