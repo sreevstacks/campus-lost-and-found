@@ -10,6 +10,7 @@ const db = require('./database/database');
 
 // Import reports route
 const reportsRouter = require('./routes/reports');
+const itemsRouter = require('./routes/items');
 
 // Middleware
 app.use(cors());
@@ -19,7 +20,7 @@ app.use('/uploads', express.static('uploads'));
 
 // Connect reports route
 app.use('/api/reports', reportsRouter);
-
+app.use('/api/items', itemsRouter);
 // Test route
 app.get('/api/health', (req, res) => {
     res.json({
