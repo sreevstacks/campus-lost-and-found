@@ -88,10 +88,23 @@ function setupLocationPicker() {
 function mediaHTML(item) {
     const loc = campusLocations.find(l => l.name === getPlace(item));
     const bg = loc ? `url('${loc.image}'), ` : "";
-    const hasPhoto = item.image && item.image.startsWith("data:image");
 
-    const inner = hasPhoto
-        ? `<div class="media-photo"><img src="${item.image}" alt="${escapeHTML(item.name)}"></div>`
+    // Support both old localStorage images and backend-uploaded images
+    let photoSrc = "";
+
+    if (item.image && item.image.startsWith("data:image")) {
+        photoSrc = item.image;
+    } else if (item.image_path) {
+        photoSrc = item.image_path.startsWith("http")
+            ? item.image_path
+            : `http://localhost:5000${item.image_path}`;
+    }
+
+    const inner = photoSrc
+        ? `<div class="media-photo">
+               <img src="${photoSrc}" alt="${escapeHTML(item.name)}"
+                    onerror="this.parentElement.innerHTML='Photo unavailable'">
+           </div>`
         : `<div class="media-photo media-empty">No photo</div>`;
 
     return `
@@ -104,19 +117,29 @@ function mediaHTML(item) {
 
 function cardHTML(item) {
     const state = item.state || "Open";
+
+    // Backend uses "type"; older frontend reports used "status"
+    const status = item.status || (
+        item.type ? item.type.charAt(0).toUpperCase() + item.type.slice(1) : "Unknown"
+    );
+
+    // Build location from backend fields
+    const location = item.location ||
+        [item.place, item.floor, item.spot].filter(Boolean).join(" · ");
+
     return `
         <article class="item-card" onclick="openItem(${item.id})">
             <div class="item-media">
                 ${mediaHTML(item)}
-                <span class="badge badge-${item.status}">${item.status}</span>
+                <span class="badge badge-${status}">${escapeHTML(status)}</span>
             </div>
             <div class="item-body">
                 <h3>${escapeHTML(item.name)}</h3>
-                <p class="meta">📍 ${escapeHTML(item.location)}</p>
+                <p class="meta">📍 ${escapeHTML(location)}</p>
                 <p class="meta">📅 ${escapeHTML(item.date)}</p>
                 <div class="item-foot">
                     <span class="cat">${escapeHTML(item.category)}</span>
-                    <span class="state state-${state}">${state}</span>
+                    <span class="state state-${state}">${escapeHTML(state)}</span>
                 </div>
             </div>
         </article>
@@ -142,34 +165,60 @@ function buildModal() {
     });
 }
 
-function openItem(id) {
-    const item = getAllItems().find(i => String(i.id) === String(id));
-    if (!item) return;
+async function openItem(id) {
+    try {
+        const response = await fetch(`http://localhost:5000/api/items/${id}`);
+        const result = await response.json();
 
-    const state = item.state || "Open";
+        if (!response.ok) {
+            throw new Error(result.message || "Could not load item details.");
+        }
 
-    document.getElementById("modalBox").innerHTML = `
-        <div class="item-media">
-            ${mediaHTML(item)}
-            <span class="badge badge-${item.status}">${item.status}</span>
-        </div>
-        <div class="modal-body">
-            <span class="state state-${state}">${state}</span>
-            <h2>${escapeHTML(item.name)}</h2>
-            <p class="desc">${escapeHTML(item.description)}</p>
+        const item = result.data;
 
-            <div class="detail-grid">
-                <div><small>Category</small><strong>${escapeHTML(item.category)}</strong></div>
-                <div><small>Location</small><strong>${escapeHTML(item.location)}</strong></div>
-                <div><small>Date</small><strong>${escapeHTML(item.date)}</strong></div>
-                <div><small>Contact</small><strong>${escapeHTML(item.contact)}</strong></div>
+        if (!item) {
+            throw new Error("Item not found.");
+        }
+
+        const state = item.state || "Open";
+
+        const status = item.status || (
+            item.type
+                ? item.type.charAt(0).toUpperCase() + item.type.slice(1)
+                : "Unknown"
+        );
+
+        const location = item.location ||
+            [item.place, item.floor, item.spot].filter(Boolean).join(" · ");
+
+        document.getElementById("modalBox").innerHTML = `
+            <div class="item-media">
+                ${mediaHTML(item)}
+                <span class="badge badge-${status}">${escapeHTML(status)}</span>
             </div>
 
-            <button class="btn btn-primary modal-close" onclick="closeModal()">Close</button>
-        </div>
-    `;
+            <div class="modal-body">
+                <span class="state state-${state}">${escapeHTML(state)}</span>
+                <h2>${escapeHTML(item.name)}</h2>
+                <p class="desc">${escapeHTML(item.description)}</p>
 
-    document.getElementById("modalOverlay").classList.add("open");
+                <div class="detail-grid">
+                    <div><small>Category</small><strong>${escapeHTML(item.category)}</strong></div>
+                    <div><small>Location</small><strong>${escapeHTML(location)}</strong></div>
+                    <div><small>Date</small><strong>${escapeHTML(item.date)}</strong></div>
+                    <div><small>Contact</small><strong>${escapeHTML(item.contact)}</strong></div>
+                </div>
+
+                <button class="btn btn-primary modal-close" onclick="closeModal()">Close</button>
+            </div>
+        `;
+
+        document.getElementById("modalOverlay").classList.add("open");
+
+    } catch (error) {
+        console.error("Item details error:", error);
+        alert(error.message || "Unable to load item details.");
+    }
 }
 
 function closeModal() {
