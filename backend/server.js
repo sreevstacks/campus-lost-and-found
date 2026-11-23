@@ -1,6 +1,6 @@
-
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -8,7 +8,7 @@ const app = express();
 // Database connection
 const db = require('./database/database');
 
-// Import reports route
+// Import routes
 const reportsRouter = require('./routes/reports');
 const itemsRouter = require('./routes/items');
 
@@ -16,11 +16,12 @@ const itemsRouter = require('./routes/items');
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Connect reports route
+// Connect routes
 app.use('/api/reports', reportsRouter);
 app.use('/api/items', itemsRouter);
+
 // Test route
 app.get('/api/health', (req, res) => {
     res.json({
