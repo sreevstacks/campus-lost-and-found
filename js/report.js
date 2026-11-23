@@ -1,5 +1,5 @@
 const form = document.getElementById("reportForm");
-const type = document.body.dataset.type;
+const type = document.body.dataset.type; // "Lost" or "Found"
 
 // Backend API address
 const API_URL = "http://localhost:5000/api/reports";
@@ -29,17 +29,18 @@ photoInput.addEventListener("change", () => {
     }
 });
 
-// Submit report to backend
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    const submitButton = form.querySelector('[type="submit"]');
+    const originalText = submitButton.textContent;
 
     const place = document.getElementById("place").value;
     const floor = document.getElementById("floor").value;
     const spot = document.getElementById("spot").value.trim();
 
-    // Create multipart form data
+    // Build the data to send (text fields + photo)
     const formData = new FormData();
-
     formData.append("type", type.toLowerCase());
     formData.append("name", document.getElementById("name").value.trim());
     formData.append("category", document.getElementById("category").value);
@@ -50,30 +51,29 @@ form.addEventListener("submit", async (e) => {
     formData.append("description", document.getElementById("description").value.trim());
     formData.append("contact", document.getElementById("contact").value.trim());
 
-    // Attach image if the user selected one
+    // Attach the photo
     const photo = photoInput.files[0];
 
-    if (photo) {
-        if (!photo.type.startsWith("image/")) {
-            alert("Please select a valid image.");
-            return;
-        }
-
-        if (photo.size > 5 * 1024 * 1024) {
-            alert("Image size must be less than 5 MB.");
-            return;
-        }
-
-        formData.append("image", photo);
+    if (!photo) {
+        alert("Please upload a photo of the item.");
+        return;
     }
 
-    try {
-        const submitButton = form.querySelector('[type="submit"]');
+    if (!photo.type.startsWith("image/")) {
+        alert("Please select a valid image.");
+        return;
+    }
 
-        if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.textContent = "Submitting...";
-        }
+    if (photo.size > 5 * 1024 * 1024) {
+        alert("Image size must be less than 5 MB.");
+        return;
+    }
+
+    formData.append("image", photo);
+
+    try {
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
 
         const response = await fetch(API_URL, {
             method: "POST",
@@ -83,7 +83,7 @@ form.addEventListener("submit", async (e) => {
         const result = await response.json();
 
         if (!response.ok) {
-             throw new Error(result.message || "Failed to submit report.");
+            throw new Error(result.message || "Failed to submit report.");
         }
 
         // Remember this report ID for the My Reports page
@@ -91,11 +91,8 @@ form.addEventListener("submit", async (e) => {
         myReportIds.push(result.reportId);
         localStorage.setItem("myReportIds", JSON.stringify(myReportIds));
 
-        alert("Report submitted successfully!");
-
         document.getElementById("formArea").style.display = "none";
         document.getElementById("success").style.display = "block";
-
         window.scrollTo({ top: 0, behavior: "smooth" });
 
     } catch (error) {
@@ -103,11 +100,7 @@ form.addEventListener("submit", async (e) => {
         alert(error.message || "Unable to connect to the backend. Please try again.");
 
     } finally {
-        const submitButton = form.querySelector('[type="submit"]');
-
-        if (submitButton) {
-            submitButton.disabled = false;
-            submitButton.textContent = "Submit Report";
-        }
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
     }
 });
